@@ -1,0 +1,25 @@
+{
+  "name": "book-list-server",
+  "version": "1.0.0",
+  "description": "the back end for the app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Heath-Dean-bookApp/Book-list-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Heath-Dean-bookApp/Book-list-server/issues"
+  },
+  "homepage": "https://github.com/Heath-Dean-bookApp/Book-list-server#readme",
+  "dependencies": {
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "pg": "^7.4.0"
+  }
+}
