@@ -3,9 +3,10 @@
 const express = require('express');
 const cors = require('cors');
 const pg = require('pg');
-
+const fs = require('fs');
+// const DATABASE_URL=postgres://fqedabhuehaupc:d8a71e5a188db4ab5c36019d0822fcfcbd75496907e7bb419f9ca4725488fc13@ec2-23-23-192-242.compute-1.amazonaws.com:5432/dcdcb09h7grr3t
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 const CLIENT_URL = process.env.CLIENT_URL;
 
 const client = new pg.Client(process.env.DATABASE_URL);
@@ -16,8 +17,45 @@ app.use(cors());
 
 app.get('/', (req, res) => res.send('Testing 1, 2, 3'));
 
-app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
+///DATABASE LOADERS///
 
-// PORT=3000
-// CLIENT_URL=http://localhost:8080
-// DATABASE_URL=postgres://localhost:5432/task_app
+function loadBooks() {
+  console.log('load books is starting')
+  client.query('SELECT COUNT(*) FROM books')
+    .then(result => {
+      if(!parseInt(result.rows[0].count)) {
+        fs.readFile('../Book-list-client/data/books.json', 'utf8', (err, fd) => {
+          JSON.parse(fd).forEach(ele => {
+            client.query(`
+            INSERT INTO
+            books(title, author, isbn, image_url, description)
+            SELECT $1, $2, $3, $4, $5
+          `,
+              [ele.title, ele.author, ele.isbn, ele.image_url, ele.description]
+            )
+              .catch(console.error);
+          })
+        })
+      }
+    })
+}
+
+function loadDB() {
+  client.query(`
+    CREATE TABLE IF NOT EXISTS
+    books (
+      book_id SERIAL PRIMARY KEY,
+      title VARCHAR,
+      author VARCHAR,
+      isbn VARCHAR,
+      image_url VARCHAR,
+      description TEXT
+    );`
+  )
+    .then(loadBooks)
+    .catch(console.error);
+}
+
+loadDB();
+
+app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
