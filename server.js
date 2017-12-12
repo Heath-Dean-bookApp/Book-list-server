@@ -17,6 +17,18 @@ app.use(cors());
 
 app.get('/', (req, res) => res.send('Testing 1, 2, 3'));
 
+// #6 from the lab
+
+app.get('/books', (request, response) => {
+  client.query(`
+    SELECT book_id, title, author, image_url FROM books
+    `
+  )
+    .then(result => response.send(result.rows))
+    .catch(console.error);
+});
+
+
 ///DATABASE LOADERS///
 
 function loadBooks() {
@@ -58,4 +70,5 @@ function loadDB() {
 
 loadDB();
 
+// this needs to be the last in the page
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
