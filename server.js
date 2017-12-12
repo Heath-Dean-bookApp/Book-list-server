@@ -4,7 +4,6 @@ const express = require('express');
 const cors = require('cors');
 const pg = require('pg');
 const fs = require('fs');
-// const DATABASE_URL=postgres://fqedabhuehaupc:d8a71e5a188db4ab5c36019d0822fcfcbd75496907e7bb419f9ca4725488fc13@ec2-23-23-192-242.compute-1.amazonaws.com:5432/dcdcb09h7grr3t
 const app = express();
 const PORT = process.env.PORT || 3000;
 const CLIENT_URL = process.env.CLIENT_URL;
@@ -19,14 +18,14 @@ app.get('/', (req, res) => res.send('Testing 1, 2, 3'));
 
 // #6 from the lab
 
-app.get('/books', (request, response) => {
-  client.query(`
-    SELECT book_id, title, author, image_url FROM books
-    `
-  )
-    .then(result => response.send(result.rows))
-    .catch(console.error);
-});
+// app.get('/books', (request, response) => {
+//   client.query(`
+//     SELECT book_id, title, author, image_url FROM books
+//     `
+//   )
+//     .then(result => response.send(result.rows))
+//     .catch(console.error);
+// });
 
 
 ///DATABASE LOADERS///
