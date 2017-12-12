@@ -18,14 +18,14 @@ app.get('/', (req, res) => res.send('Testing 1, 2, 3'));
 
 // #6 from the lab
 
-// app.get('/books', (request, response) => {
-//   client.query(`
-//     SELECT book_id, title, author, image_url FROM books
-//     `
-//   )
-//     .then(result => response.send(result.rows))
-//     .catch(console.error);
-// });
+app.get('/api/v1/books', (request, response) => {
+  client.query(`
+    SELECT book_id, title, author, image_url FROM books
+    `
+  )
+    .then(result => response.send(result.rows))
+    .catch(console.error);
+});
 
 
 ///DATABASE LOADERS///
