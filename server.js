@@ -18,7 +18,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.get('/', (req, res) => res.send('Testing 1, 2, 3'));
+// app.get('/', (req, res) => res.send('Testing 1, 2, 3'));
 
 // gets all the books from BD.
 
@@ -99,4 +99,5 @@ function loadDB() {
 loadDB();
 
 // this needs to be the last in the page
+app.get('*', (req,res) => res.redirect(CLIENT_URL));
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
