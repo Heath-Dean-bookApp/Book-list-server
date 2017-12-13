@@ -16,12 +16,24 @@ app.use(cors());
 
 app.get('/', (req, res) => res.send('Testing 1, 2, 3'));
 
-// #6 from the lab
+// gets all the books from BD.
 
 app.get('/api/v1/books', (request, response) => {
   client.query(`
     SELECT book_id, title, author, image_url FROM books
     `
+  )
+    .then(result => response.send(result.rows))
+    .catch(console.error);
+});
+
+// fecthing just one books
+
+app.get('/api/v1/books/:id', (request, response) => {
+  client.query(`
+    SELECT book_id, title, author, isbn, image_url, description FROM books
+    WHERE book_id=$1;`,
+    [request.params.id]
   )
     .then(result => response.send(result.rows))
     .catch(console.error);
