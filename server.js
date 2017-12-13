@@ -3,6 +3,7 @@
 const express = require('express');
 const cors = require('cors');
 const pg = require('pg');
+const bodyParser = require('body-parser');
 const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -13,6 +14,9 @@ client.connect();
 client.on('error', err => console.error(err));
 
 app.use(cors());
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.get('/', (req, res) => res.send('Testing 1, 2, 3'));
 
@@ -37,6 +41,19 @@ app.get('/api/v1/books/:id', (request, response) => {
   )
     .then(result => response.send(result.rows))
     .catch(console.error);
+});
+
+// adding a new book. had to install and use bodyParser
+
+app.post('/api/v1/books', (request, response) => {
+  client.query(
+    'INSERT INTO books (title, author, isbn, image_url, description) VALUES($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING',
+    [request.body.title, request.body.author, request.body.isbn, request.body.image_url, request.body.description],
+    function(err) {
+      if (err) console.error(err)
+      response.send('insert complete');
+    }
+  )
 });
 
 
