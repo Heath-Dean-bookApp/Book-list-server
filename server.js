@@ -57,12 +57,13 @@ app.post('/api/v1/books', (request, response) => {
 // updating the seleceted book
 
 app.put('/api/v1/books/:id', (request, response) => {
+  console.log('i am here in app.put');
   client.query(`
     UPDATE books
     SET title=$1, author=$2, isbn=$3, image_url=$4, description=$5
     WHERE book_id=$6
     `,
-    [request.body.title, request.body.author, request.body.isbn, request.body.image_url, request.body.description, request.body.book_id]
+    [request.body.title, request.body.author, request.body.isbn, request.body.image_url, request.body.description, request.params.id]
   )
     .then(() => response.send(200))
     .catch(console.error);
