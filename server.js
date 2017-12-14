@@ -18,8 +18,6 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.get('/', (req, res) => res.send('Testing 1, 2, 3'));
-
 // gets all the books from BD.
 
 app.get('/api/v1/books', (request, response) => {
@@ -54,6 +52,32 @@ app.post('/api/v1/books', (request, response) => {
       response.send('insert complete');
     }
   )
+});
+
+// updating the seleceted book
+
+app.put('/api/v1/books/:id', (request, response) => {
+  console.log('i am here in app.put');
+  client.query(`
+    UPDATE books
+    SET title=$1, author=$2, isbn=$3, image_url=$4, description=$5
+    WHERE book_id=$6
+    `,
+    [request.body.title, request.body.author, request.body.isbn, request.body.image_url, request.body.description, request.params.id]
+  )
+    .then(() => response.send(200))
+    .catch(console.error);
+});
+
+// delete a single book
+
+app.delete('/api/v1/books/:id', (request, response) => {
+  client.query(
+    `DELETE FROM books WHERE book_id=$1;`,
+    [request.params.id]
+  )
+    .then(() => response.send(204))
+    .catch(console.error);
 });
 
 
@@ -99,4 +123,5 @@ function loadDB() {
 loadDB();
 
 // this needs to be the last in the page
+app.get('*', (req,res) => res.redirect(CLIENT_URL));
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
