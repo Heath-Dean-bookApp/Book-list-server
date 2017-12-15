@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.get('/', (req, res) => res.send('Testing 1, 2, 3'));
 
 // admin get
-app.get('api/v1/admin', (req, res) => res.send(TOKEN === parseInt(req.query.token)))
+app.get('/api/v1/admin', (req, res) => res.send(TOKEN == parseInt(req.query.token)))
 
 
 
