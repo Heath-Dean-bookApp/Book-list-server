@@ -27,7 +27,7 @@ app.get('/', (req, res) => res.send('Testing 1, 2, 3'));
 // admin get
 app.get('api/v1/admin', (req, res) => res.send(TOKEN === parseInt(req.query.token)))
 
-// api get
+//search books api
 app.get('/api/v1/books/find', (req, res) => {
   let url = 'https://www.googleapis.com/books/v1/volumes';
   let query = ''
@@ -53,6 +53,11 @@ app.get('/api/v1/books/find', (req, res) => {
     }))
     .then(arr => res.send(arr))
     .catch(console.error)
+})
+
+//get request to show single book from search
+app.get('api/v1/books/find/:isbn', (request, response) => {
+  superagent.get()
 })
 
 
