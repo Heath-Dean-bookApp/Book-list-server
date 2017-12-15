@@ -8,6 +8,7 @@ const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const CLIENT_URL = process.env.CLIENT_URL;
+const TOKEN = process.env.TOKEN;
 
 const client = new pg.Client(process.env.DATABASE_URL);
 client.connect();
@@ -17,6 +18,14 @@ app.use(cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+
+
+app.get('/', (req, res) => res.send('Testing 1, 2, 3'));
+
+// admin get
+app.get('api/v1/admin', (req, res) => res.send(TOKEN === parseInt(req.query.token)))
+
+
 
 // gets all the books from BD.
 
