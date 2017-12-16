@@ -37,7 +37,7 @@ app.get('/api/v1/books/find', (req, res) => {
 
   superagent.get(url)
     .query({'q': query})
-    .query({'key': API_KEY})
+    .query({'key': GOOGLE_API_KEY})
     .then(response => response.body.items.map((book, idx) => {
       let { title, authors, industryIdentifiers, imageLinks, description } = book.volumeInfo;
       let placeholderImage = 'http://www.newyorkpaddy.com/images/covers/NoCoverAvailable.jpg';
@@ -57,7 +57,25 @@ app.get('/api/v1/books/find', (req, res) => {
 
 //get request to show single book from search
 app.get('api/v1/books/find/:isbn', (request, response) => {
-  superagent.get()
+  let url = 'https://www.googlesapis.com/books/v1/volumes';
+  superagent.get(url)
+    .query({ 'q': `+isbn:${req.params.isbn}`})
+    .query({ 'key': GOOGLE_API_KEY})
+    .then(response => response.body.items.map((book, idx) => {
+      let { title, authors, industryIdentifiers, imageLinks, description} = book.volumeInfo;
+      let placeholderImage = 'http://www.newyorkpaddy.com/images/covers/NoCoverAvailable.jpg';
+
+      return {
+        title: title ? title : 'No title available',
+        author: authors ? authors[0] : 'No authors available',
+        isbn: industryIdentifiers ? `ISBN_13
+        ${industryIdentifiers[0].identifier}` : 'No ISBN available',
+        image_url: imageLinks ? imageLinks.smallThumbnail : placeholderImage,
+        description: description ? description : 'No description available',
+      }
+    }))
+    .then(book => res.send(book[0]))
+    .catch(console.error)
 })
 
 
