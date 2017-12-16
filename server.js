@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.get('/', (req, res) => res.send('Testing 1, 2, 3'));
 
 // admin get
-app.get('api/v1/admin', (req, res) => res.send(TOKEN === parseInt(req.query.token)))
+app.get('/api/v1/admin', (req, res) => res.send(TOKEN == parseInt(req.query.token)))
 
 //search books api
 app.get('/api/v1/books/find', (req, res) => {
@@ -118,7 +118,6 @@ app.post('/api/v1/books', (request, response) => {
 // updating the seleceted book
 
 app.put('/api/v1/books/:id', (request, response) => {
-  console.log('i am here in app.put');
   client.query(`
     UPDATE books
     SET title=$1, author=$2, isbn=$3, image_url=$4, description=$5
